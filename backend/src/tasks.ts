@@ -1,3 +1,4 @@
+import type { Request, RequestHandler, Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 
 /*
@@ -6,11 +7,14 @@ import { v4 as uuidv4 } from 'uuid'
 
 let tasks: Task[] = []
 
-export const getAllTasksHandler = (req, res) => {
+export const getAllTasksHandler: RequestHandler = (_, res: Response) => {
   res.json(tasks)
 }
 
-export const addTaskHandler = (req, res) => {
+export const addTaskHandler = (
+  req: Request<{}, {}, Partial<Task>>,
+  res: Response
+) => {
   const { title, description } = req.body
 
   /*
@@ -18,7 +22,7 @@ export const addTaskHandler = (req, res) => {
     */
 
   if (!title || !description) {
-    return res
+    res
       .status(400)
       .json({ error: 'Title and description must not be empty' })
   }
@@ -35,14 +39,17 @@ export const addTaskHandler = (req, res) => {
       title,
       description,
       complete: false
-    },
+    } as Task,
     ...tasks
   ]
 
   res.json(tasks)
 }
 
-export const updateTaskHandler = (req, res) => {
+export const updateTaskHandler = (
+  req: Request<{ id: Task['id'] }, {}, Partial<Task>>,
+  res: Response
+) => {
   const { id } = req.params
   const { title, description, complete } = req.body
 
@@ -57,7 +64,7 @@ export const updateTaskHandler = (req, res) => {
     */
 
   if (index < 0) {
-    return res
+    res
       .status(404)
       .json({ error: 'Task not found' })
   }
@@ -67,7 +74,7 @@ export const updateTaskHandler = (req, res) => {
     */
 
   if (!title || !description) {
-    return res
+    res
       .status(400)
       .json({ error: 'Title and description must not be empty' })
   }
@@ -87,7 +94,10 @@ export const updateTaskHandler = (req, res) => {
   res.json(tasks)
 }
 
-export const deleteTaskHandler = (req, res) => {
+export const deleteTaskHandler = (
+  req: Request<{ id: Task['id'] }>,
+  res: Response
+) => {
   const { id } = req.params
 
   /*
@@ -101,7 +111,7 @@ export const deleteTaskHandler = (req, res) => {
     */
 
   if (index < 0) {
-    return res
+    res
       .status(404)
       .json({ error: 'Task not found' })
   }
@@ -111,5 +121,5 @@ export const deleteTaskHandler = (req, res) => {
     */
 
   tasks.splice(index, 1)
-  return res.json(tasks)
+  res.json(tasks)
 }
