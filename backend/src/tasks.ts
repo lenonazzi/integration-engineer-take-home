@@ -25,6 +25,8 @@ export const addTaskHandler = (
     res
       .status(400)
       .json({ error: 'Title and description must not be empty' })
+
+    return
   }
 
   /*
@@ -67,6 +69,8 @@ export const updateTaskHandler = (
     res
       .status(404)
       .json({ error: 'Task not found' })
+
+    return
   }
 
   /*
@@ -77,6 +81,8 @@ export const updateTaskHandler = (
     res
       .status(400)
       .json({ error: 'Title and description must not be empty' })
+
+    return
   }
 
   /*
@@ -114,6 +120,8 @@ export const deleteTaskHandler = (
     res
       .status(404)
       .json({ error: 'Task not found' })
+
+    return
   }
 
   /*
