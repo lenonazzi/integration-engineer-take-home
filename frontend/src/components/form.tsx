@@ -45,10 +45,10 @@ function Form() {
       />
 
       <Button
-        className="px-2 gap-x-2"
+        className="gap-x-2 ml-auto text-sm"
         onClick={createTask}
       >
-        <CirclePlus size={20} />
+        <CirclePlus size={16} />
         Add task
       </Button>
     </div>
