@@ -1,34 +1,73 @@
-import { Pencil, Square, SquareCheck, Trash2 } from "lucide-react"
-import { memo, useState } from "react"
+import { memo } from "react"
+import {
+  Pencil,
+  Square,
+  SquareCheckBig,
+  Trash2
+} from "lucide-react"
+
 import { cn } from "../utils/cn"
+import { useTasks } from "../providers/tasks"
+import { toast } from "react-toastify"
 
 function Task({ task }: { task: Task }) {
-  const [isComplete, setIsComplete] = useState(false)
+  const { setTasks } = useTasks()
 
-  const toggleTask = (id: Pick<Task, 'id'>) => {
-    setIsComplete(!isComplete)
+  const editTask = async (id: Task['id']) => {
+    const tasks = await fetch(`http://localhost:8000/api/tasks/${id}`, {
+      headers: { "Content-Type": "application/json" },
+      method: 'PATCH',
+      body: JSON.stringify({
+        title: task.title,
+        description: task.description,
+        complete: !task.complete
+      }),
+    })
+      .then(async data => await data.json())
+
+    if (tasks.error) {
+      toast.error(tasks.error)
+      return
+    }
+
+    toast.success("Task successfully updated")
+    setTasks(tasks)
+  }
+
+  const deleteTask = async (id: Task['id']) => {
+    const tasks = await fetch(`http://localhost:8000/api/tasks/${id}`, {
+      method: 'DELETE'
+    })
+      .then(async data => await data.json())
+
+    if (tasks.error) {
+      toast.error(tasks.error)
+      return
+    }
+
+    toast.success("Task successfully deleted")
+    setTasks(tasks)
   }
 
   return (
     <li
-      key={task.id}
       className={cn(
         "flex flex-row gap-4 rounded-lg border border-input p-4 text-left text-sm transition-all hover:bg-input items-center justify-start shadow-sm",
-        { 'line-through': isComplete }
+        { 'line-through bg-green-500/10': task.complete }
       )}
     >
-      <button onClick={() => toggleTask(task.id)}>
-        {isComplete
-          ? <SquareCheck />
+      <button onClick={() => editTask(task.id)}>
+        {task.complete
+          ? <SquareCheckBig />
           : <Square />
         }
       </button>
 
       <div>
-        <h3 className={cn({ 'italic': isComplete })}>{task.title}</h3>
+        <h3 className={cn({ 'italic': task.complete })}>{task.title}</h3>
         <p className={cn(
           "text-xs text-neutral-400",
-          { 'italic': isComplete }
+          { 'italic': task.complete }
         )}>{task.description}</p>
       </div>
 

@@ -23,6 +23,12 @@ export default {
         secondary: {
           400: "#242424",
           500: "#1a1a1a"
+        },
+        green: {
+          500: "#22c55e"
+        },
+        red: {
+          500: "#e11d48"
         }
       }
     },
