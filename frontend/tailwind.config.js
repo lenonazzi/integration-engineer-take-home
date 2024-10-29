@@ -1,7 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 
-const theme = require("./config/theme")
-
 export default {
   content: [
     "./index.html",
