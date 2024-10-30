@@ -8,6 +8,7 @@ import {
   type PropsWithChildren
 } from "react"
 import { API_URL } from "../constants"
+import { toast } from "react-toastify"
 
 interface TasksContextProps {
   tasks: Task[]
@@ -23,10 +24,20 @@ const TasksProvider: FC<PropsWithChildren> = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>([])
 
   const fetchTasks = async () => {
-    const response = await fetch(`${API_URL}/api/tasks`)
-    const tasks = await response.json()
+    try {
+      const tasks = await fetch(`${API_URL}/api/tasks`)
+        .then(async data => await data.json())
 
-    setTasks(tasks)
+      if (tasks.error) {
+        toast.error(tasks.error)
+        return
+      }
+
+      toast.success("Task successfully added")
+      setTasks(tasks)
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   useEffect(() => {

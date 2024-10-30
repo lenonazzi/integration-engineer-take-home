@@ -11,7 +11,7 @@ import { toast } from "react-toastify"
 import { cn } from "../utils/cn"
 import { useTasks } from "../providers/tasks"
 import { API_URL } from "../constants"
-import TaskDialog from "./TaskDialog"
+import TaskDialog from "./taskDialog"
 
 function Task({ task }: { task: Task }) {
   const { setTasks } = useTasks()
@@ -21,43 +21,53 @@ function Task({ task }: { task: Task }) {
   const toggleTask = async (id: Task['id']) => {
     setLoading(true)
 
-    const tasks = await fetch(`${API_URL}/api/tasks/${id}`, {
-      headers: { "Content-Type": "application/json" },
-      method: 'PATCH',
-      body: JSON.stringify({
-        complete: !task.complete
-      }),
-    })
-      .then(async data => await data.json())
+    try {
+      const tasks = await fetch(`${API_URL}/api/tasks/${id}`, {
+        headers: { "Content-Type": "application/json" },
+        method: 'PATCH',
+        body: JSON.stringify({
+          complete: !task.complete
+        }),
+      })
+        .then(async data => await data.json())
 
-    setLoading(false)
+      if (tasks.error) {
+        toast.error(tasks.error)
+        return
+      }
 
-    if (tasks.error) {
-      toast.error(tasks.error)
-      return
+      toast.success("Task successfully updated")
+      setTasks(tasks)
+    } catch (e) {
+      toast.error(String(e))
+    } finally {
+      setLoading(false)
     }
-
-    toast.success("Task successfully updated")
-    setTasks(tasks)
   }
 
   const deleteTask = async (id: Task['id']) => {
     setLoading(true)
 
-    const tasks = await fetch(`${API_URL}/api/tasks/${id}`, {
-      method: 'DELETE'
-    })
-      .then(async data => await data.json())
+    try {
+      const tasks = await fetch(`${API_URL}/api/tasks/${id}`, {
+        method: 'DELETE'
+      })
+        .then(async data => await data.json())
 
-    setLoading(false)
+      setLoading(false)
 
-    if (tasks.error) {
-      toast.error(tasks.error)
-      return
+      if (tasks.error) {
+        toast.error(tasks.error)
+        return
+      }
+
+      toast.success("Task successfully deleted")
+      setTasks(tasks)
+    } catch (e) {
+      toast.error(String(e))
+    } finally {
+      setLoading(false)
     }
-
-    toast.success("Task successfully deleted")
-    setTasks(tasks)
   }
 
   return (

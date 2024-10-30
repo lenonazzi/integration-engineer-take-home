@@ -36,31 +36,35 @@ function Form({ task, callback }: FormProps) {
       ? 'PATCH'
       : 'POST'
 
-    const tasks = await fetch(URL, {
-      headers: { "Content-Type": "application/json" },
-      method: METHOD,
-      body: JSON.stringify({
-        title: formData.title,
-        description: formData.description
-      }),
-    })
-      .then(async data => await data.json())
+    try {
+      const tasks = await fetch(URL, {
+        headers: { "Content-Type": "application/json" },
+        method: METHOD,
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description
+        }),
+      })
+        .then(async data => await data.json())
 
-    setLoading(false)
+      if (tasks.error) {
+        toast.error(tasks.error)
+        return
+      }
 
-    if (tasks.error) {
-      toast.error(tasks.error)
-      return
+      resetForm()
+
+      if (callback && typeof callback === 'function') {
+        callback()
+      }
+
+      toast.success("Task successfully added")
+      setTasks(tasks)
+    } catch (e) {
+      toast.error(String(e))
+    } finally {
+      setLoading(false)
     }
-
-    resetForm()
-
-    if (callback && typeof callback === 'function') {
-      callback()
-    }
-
-    toast.success("Task successfully added")
-    setTasks(tasks)
   }
 
   const ButtonIcon = () => {
