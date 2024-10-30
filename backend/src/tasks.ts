@@ -74,18 +74,6 @@ export const updateTaskHandler = (
   }
 
   /*
-    * Validate if title or description are not empty
-    */
-
-  if (!title || !description) {
-    res
-      .status(400)
-      .json({ error: 'Title and description must not be empty' })
-
-    return
-  }
-
-  /*
     * Update the task fields, expect the id
     * -> if a field is not set, we keep the old value
     */
