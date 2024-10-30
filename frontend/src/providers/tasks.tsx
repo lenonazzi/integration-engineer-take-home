@@ -33,7 +33,6 @@ const TasksProvider: FC<PropsWithChildren> = ({ children }) => {
         return
       }
 
-      toast.success("Task successfully added")
       setTasks(tasks)
     } catch (e) {
       console.error(e)
