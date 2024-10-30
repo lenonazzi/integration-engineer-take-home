@@ -4,3 +4,5 @@ type Task = {
   description: string
   complete: boolean
 }
+
+type TaskResponse = Task[] | { error: string }

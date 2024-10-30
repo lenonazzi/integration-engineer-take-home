@@ -8,7 +8,7 @@ import TasksProvider from './providers/tasks'
 
 function App() {
   return (
-    <main className="flex flex-col max-w-prose m-auto gap-12 py-12 overflow-y-auto">
+    <main className="flex flex-col max-w-prose m-auto gap-12 py-12 px-2 overflow-y-auto">
       <h1 className="font-bold text-3xl text-center">Task Management App</h1>
 
       <TasksProvider>

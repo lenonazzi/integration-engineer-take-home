@@ -7,6 +7,7 @@ import {
   type FC,
   type PropsWithChildren
 } from "react"
+import { API_URL } from "../constants"
 
 interface TasksContextProps {
   tasks: Task[]
@@ -22,7 +23,7 @@ const TasksProvider: FC<PropsWithChildren> = ({ children }) => {
   const [tasks, setTasks] = useState<Task[]>([])
 
   const fetchTasks = async () => {
-    const response = await fetch('http://localhost:8000/api/tasks')
+    const response = await fetch(`${API_URL}/api/tasks`)
     const tasks = await response.json()
 
     setTasks(tasks)

@@ -1,23 +1,44 @@
-import { useState } from "react"
-import Button from "./button"
-import Input from "./input"
-import { CirclePlus, LoaderCircle } from "lucide-react"
-import { useTasks } from "../providers/tasks"
+import { useState, type FormEvent } from "react"
+import { CirclePlus, LoaderCircle, Save } from "lucide-react"
 import { toast } from "react-toastify"
 
-function Form() {
+import { useTasks } from "../providers/tasks"
+import { API_URL } from "../constants"
+
+import Button from "./button"
+import Input from "./input"
+
+interface FormProps {
+  task?: Task
+  callback?: () => void
+}
+
+function Form({ task, callback }: FormProps) {
   const { setTasks } = useTasks()
   const [loading, setLoading] = useState(false)
-  const [formData, setFormData] = useState({ title: '', description: '' })
+  const [formData, setFormData] = useState({
+    title: task ? task.title : '',
+    description: task ? task.description : ''
+  })
 
   const resetForm = () => setFormData({ title: '', description: '' })
 
-  const createTask = async () => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
     setLoading(true)
 
-    const tasks = await fetch('http://localhost:8000/api/tasks', {
+    const URL = task
+      ? `${API_URL}/api/tasks/${task.id}`
+      : `${API_URL}/api/tasks`
+
+    const METHOD = task
+      ? 'PATCH'
+      : 'POST'
+
+    const tasks = await fetch(URL, {
       headers: { "Content-Type": "application/json" },
-      method: 'POST',
+      method: METHOD,
       body: JSON.stringify({
         title: formData.title,
         description: formData.description
@@ -34,12 +55,25 @@ function Form() {
 
     resetForm()
 
+    if (callback && typeof callback === 'function') {
+      callback()
+    }
+
     toast.success("Task successfully added")
     setTasks(tasks)
   }
 
+  const ButtonIcon = () => {
+    return task
+      ? <Save size={16} />
+      : <CirclePlus size={16} />
+  }
+
   return (
-    <div className="flex flex-col gap-2">
+    <form
+      className="flex flex-col gap-2"
+      onSubmit={handleSubmit}
+    >
       <Input
         type="text"
         placeholder="Title"
@@ -56,16 +90,20 @@ function Form() {
 
       <Button
         className="gap-x-2 ml-auto text-sm"
-        onClick={createTask}
         disabled={loading}
+        type="submit"
       >
-        Create
+        {task
+          ? 'Save'
+          : 'Create'
+        }
+
         {loading
           ? <LoaderCircle size={16} className="animate-spin" />
-          : <CirclePlus size={16} />
+          : <ButtonIcon />
         }
       </Button>
-    </div>
+    </form>
   )
 }
 
