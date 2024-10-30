@@ -21,7 +21,7 @@ export const addTaskHandler = (
     * Validate if title or description are not empty
     */
 
-  if (!title || !description) {
+  if (!title?.trim() || !description?.trim()) {
     res
       .status(400)
       .json({ error: 'Title and description must not be empty' })
@@ -80,8 +80,8 @@ export const updateTaskHandler = (
 
   tasks[index] = {
     ...tasks[index],
-    title: title ?? tasks[index].title,
-    description: description ?? tasks[index].description,
+    title: !title?.trim() ? tasks[index].title : title,
+    description: !description?.trim() ? tasks[index].description : description,
     complete: complete ?? tasks[index].complete
   }
 
