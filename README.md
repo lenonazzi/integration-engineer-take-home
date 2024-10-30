@@ -50,3 +50,124 @@ Regards,
 The Duda Solutions Engineering Team
 
 ## Add any instructions to get your submission running below this line.
+
+### 🚀 Getting Started
+
+To set up and run the application, first clone this repository to your local machine using the following command in your terminal:
+```bash
+  git clone https://github.com/lenonazzi/integration-engineer-take-home.git
+```
+
+> [!IMPORTANT]
+> Ensure you have [Node.js](https://nodejs.org/) installed for the application to run properly.
+
+#### Running the Frontend
+
+Navigate to the frontend folder:
+```bash
+  cd frontend
+```
+
+If this is your first time running the __frontend__ application, install the project dependencies:
+```bash
+  npm install
+```
+
+Then, you can start the application locally with:
+```bash
+  npm run dev
+```
+
+🎉 The frontend will be running on [localhost:5173](http://localhost:5173/)
+
+#### Running the backend
+
+Navigate to the backend folder:
+```bash
+  cd backend
+```
+
+If this is your first time running the __backend__ application, install the project dependencies:
+```bash
+  npm install
+```
+
+Then, you can start the application locally with:
+```bash
+  npm run dev
+```
+
+🎉 The backend will be running on [localhost:8000](http://localhost:8000/)
+
+### 🔥 REST API
+
+#### Get All Tasks
+
+##### Request
+
+`GET /api/tasks`
+
+##### Response
+
+```json
+  [
+    {
+      "id": "c9a3fc13-ae69-499c-a793-3798439c2f1e",
+      "title": "My task",
+      "description": "Example of a task.",
+      "complete": false
+    }
+  ]
+```
+
+#### Add a New Task
+
+##### Request
+
+`POST /api/tasks`
+
+##### Body
+
+```json
+  {
+    "title": "Hello!",
+    "description": "Another example of a task."
+  }
+```
+
+##### Response
+
+An array containing all the tasks. See the [GET All Tasks](####-Get-all-tasks) route for a response example.
+
+#### Update a Task
+
+##### Request
+
+`PATCH /api/tasks/:id`
+
+##### Body
+
+```json
+  {
+    "title": "Hello!",
+    "description": "Another example of a task.",
+    "complete": true
+  }
+```
+
+> [!TIP]
+> All fields are optional. You can use this endpoint to update only specific fields of a task.
+
+##### Response
+
+An array containing all the tasks. See the [GET All Tasks](####-Get-all-tasks) route for a response example.
+
+#### Delete a task
+
+##### Request
+
+`DELETE /api/tasks/:id`
+
+##### Response
+
+An array containing all the tasks. See the [GET All Tasks](####-Get-all-tasks) route for a response example.
