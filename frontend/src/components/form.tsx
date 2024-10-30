@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react"
-import { CirclePlus, LoaderCircle, Save } from "lucide-react"
+import { Plus, LoaderCircle, Save } from "lucide-react"
 import { toast } from "react-toastify"
 
 import { useTasks } from "../providers/tasks"
@@ -66,7 +66,7 @@ function Form({ task, callback }: FormProps) {
   const ButtonIcon = () => {
     return task
       ? <Save size={16} />
-      : <CirclePlus size={16} />
+      : <Plus size={16} />
   }
 
   return (

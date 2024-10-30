@@ -1,4 +1,4 @@
-import { CircleX } from "lucide-react"
+import { X } from "lucide-react"
 import Form from "./form"
 
 interface TaskDialogProps {
@@ -19,7 +19,7 @@ function TaskDialog({ task, closeDialog }: TaskDialogProps) {
           className="absolute right-4 top-4"
           onClick={closeDialog}
         >
-          <CircleX size={20} />
+          <X size={20} />
         </button>
 
         <h2 className="text-lg font-semibold">Edit task</h2>
